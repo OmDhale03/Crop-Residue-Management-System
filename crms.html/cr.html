@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌱 Crop Cure Stable | CRMS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f7fbf7;
+        --surface: #ffffff;
+        --primary: #1f7a3a;
+        --primary-600: #17622e;
+        --accent: #9be19b;
+        --muted: #667085;
+        --ring: rgba(31, 122, 58, 0.25);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial,
+          sans-serif;
+        background: linear-gradient(180deg, #f2faf2, #f7fbf7);
+        color: #111;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .app {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      /* Topbar */
+      .topbar {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface);
+        padding: 14px 18px;
+        border-radius: 18px;
+        box-shadow: 0 8px 30px rgba(31, 122, 58, 0.08);
+        position: sticky;
+        top: 12px;
+        z-index: 10;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand .logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: conic-gradient(
+          from 180deg at 50% 50%,
+          #2fbf71,
+          #1f7a3a 40%,
+          #9be19b 80%,
+          #2fbf71
+        );
+        box-shadow: inset 0 0 0 2px #fff;
+      }
+      .brand .title {
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+      .subtitle {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      /* Nav */
+      .nav {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .tab {
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid #e7efe7;
+        background: #fff;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .tab.active {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+
+      /* Layout */
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      @media (min-width: 800px) {
+        .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid #e8eee8;
+        padding: 18px;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      }
+      .card h3 {
+        margin: 0.2rem 0 8px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+
+      /* Buttons & Inputs */
+      .btn {
+        appearance: none;
+        border: 0;
+        outline: 0;
+        background: var(--primary);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 16px rgba(31, 122, 58, 0.25);
+      }
+      .btn:active {
+        transform: translateY(1px);
+      }
+      .btn.secondary {
+        background: #fff;
+        color: #111;
+        border: 1px solid #dfe7df;
+        box-shadow: none;
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--primary);
+        border: 1px dashed var(--primary);
+      }
+      .btn.small {
+        padding: 8px 10px;
+        border-radius: 10px;
+        font-weight: 600;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      label {
+        font-size: 0.9rem;
+        color: #2a2a2a;
+        font-weight: 600;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid #dfe7df;
+        background: #fff;
+        outline: none;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px var(--ring);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #f0f8f0;
+        border: 1px solid #e0efe0;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      /* Views */
+      .view {
+        display: none;
+        animation: fade 0.2s ease;
+      }
+      .view.active {
+        display: block;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0.3;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* Tables */
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 12px 14px;
+      }
+      thead th {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #475;
+      }
+      tbody tr {
+        background: #fff;
+        border: 1px solid #e8eee8;
+      }
+      tbody tr td:first-child {
+        border-radius: 12px 0 0 12px;
+      }
+      tbody tr td:last-child {
+        border-radius: 0 12px 12px 0;
+      }
+
+      footer {
+        margin: 28px 0 8px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .empty {
+        border: 2px dashed #dfe7df;
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Top Bar -->
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <div class="title">Crop Cure Stable</div>
+            <div class="subtitle">Crop Residue Management System</div>
+          </div>
+        </div>
+        <nav class="nav" role="tablist" aria-label="Primary">
+          <button class="tab active" data-target="home">Home</button>
+          <button class="tab" data-target="farmer">Farmer</button>
+          <button class="tab" data-target="ngo">NGO</button>
+          <button class="tab" data-target="weather">Weather</button>
+          <button class="tab" data-target="about">About</button>
+        </nav>
+      </div>
+
+      <!-- HOME -->
+      <section id="home" class="view active">
+        <div class="grid" style="margin-top: 18px">
+          <div class="card">
+            <h3>👨‍🌾 Farmer Portal</h3>
+            <p class="muted">
+              Report residue, request help, and track status. Simple and fast.
+            </p>
+            <div class="row">
+              <span class="pill">Offline-ready (localStorage)</span>
+              <span class="pill">No login needed</span>
+            </div>
+            <div style="height: 12px"></div>
+            <button class="btn" data-target="farmer">
+              Open Farmer Dashboard
+            </button>
+          </div>
+          <div class="card">
+            <h3>🏢 NGO Console</h3>
+            <p class="muted">
+              View all farmer reports, filter by district, and assign support
+              actions.
+            </p>
+            <div class="row">
+              <span class="pill">CSV export</span>
+              <span class="pill">Status tracking</span>
+            </div>
+            <div style="height: 12px"></div>
+            <button class="btn" data-target="ngo">Open NGO Console</button>
+          </div>
+          <div class="card">
+            <h3>🌦️ Weather Insights</h3>
+            <p class="muted">
+              7‑day forecast + burn-risk heuristic to plan eco‑friendly residue
+              handling.
+            </p>
+            <div class="row">
+              <span class="pill">Geolocation</span>
+              <span class="pill">Open‑Meteo API (no key)</span>
+            </div>
+            <div style="height: 12px"></div>
+            <button class="btn" data-target="weather">Open Weather Page</button>
+          </div>
+          <div class="card">
+            <h3>📦 Data Utilities</h3>
+            <p class="muted">
+              Export / import reports to share across devices or with your
+              mentor.
+            </p>
+            <div class="row">
+              <button class="btn secondary small" id="exportJSON">
+                Export JSON
+              </button>
+              <label class="btn ghost small" for="importFile"
+                >Import JSON</label
+              >
+              <input
+                id="importFile"
+                type="file"
+                accept="application/json"
+                hidden
+              />
+              <button class="btn ghost small" id="resetAll">
+                Reset Demo Data
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FARMER -->
+      <section id="farmer" class="view">
+        <div class="grid" style="margin-top: 18px">
+          <div class="card">
+            <h3>📝 Submit Residue Report</h3>
+            <p class="muted">
+              Fill details below. Your report becomes visible to NGOs
+              immediately.
+            </p>
+            <form id="reportForm">
+              <div class="row">
+                <div style="flex: 1">
+                  <label>Farmer Name</label>
+                  <input required id="f_name" placeholder="e.g., Om Dhale" />
+                </div>
+                <div style="flex: 1">
+                  <label>Phone</label>
+                  <input
+                    required
+                    id="f_phone"
+                    placeholder="10-digit"
+                    maxlength="14"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div style="flex: 1">
+                  <label>State</label>
+                  <input
+                    required
+                    id="f_state"
+                    placeholder="e.g., Maharashtra"
+                  />
+                </div>
+                <div style="flex: 1">
+                  <label>District</label>
+                  <input required id="f_district" placeholder="e.g., Nagpur" />
+                </div>
+              </div>
+              <div class="row">
+                <div style="flex: 1">
+                  <label>Crop Type</label>
+                  <select id="f_crop" required>
+                    <option value="">Select crop</option>
+                    <option>Wheat</option>
+                    <option>Rice</option>
+                    <option>Maize</option>
+                    <option>Soybean</option>
+                    <option>Sugarcane</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div style="flex: 1">
+                  <label>Field Area (acre)</label>
+                  <input
+                    required
+                    id="f_area"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="e.g., 2.5"
+                  />
+                </div>
+                <div style="flex: 1">
+                  <label>Residue (tonnes)</label>
+                  <input
+                    required
+                    id="f_residue"
+                    type="number"
+                    min="0"
+                    step="0.1"
+                    placeholder="e.g., 1.2"
+                  />
+                </div>
+              </div>
+              <div class="row">
+                <div style="flex: 1">
+                  <label>Preferred Solution</label>
+                  <select id="f_solution">
+                    <option>Happy Seeder</option>
+                    <option>Composting</option>
+                    <option>Biochar</option>
+                    <option>Mulching</option>
+                    <option>Biogas</option>
+                    <option>Advice Only</option>
+                  </select>
+                </div>
+                <div style="flex: 1">
+                  <label>Urgency</label>
+                  <select id="f_urgency">
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                  </select>
+                </div>
+              </div>
+              <label>Notes</label>
+              <textarea
+                id="f_notes"
+                rows="3"
+                placeholder="Any extra details…"
+              ></textarea>
+              <div style="height: 12px"></div>
+              <div class="row">
+                <button class="btn" type="submit">Submit Report</button>
+                <button class="btn secondary" type="button" id="prefillDemo">
+                  Prefill Demo
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div class="card">
+            <h3>📋 My Recent Reports</h3>
+            <div id="farmerList"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NGO -->
+      <section id="ngo" class="view">
+        <div class="grid" style="margin-top: 18px">
+          <div class="card">
+            <h3>🔎 Browse & Filter Reports</h3>
+            <div class="row">
+              <div style="flex: 1">
+                <label>Search (name/district/phone)</label>
+                <input id="ngoSearch" placeholder="Type to filter…" />
+              </div>
+              <div style="flex: 1">
+                <label>Status</label>
+                <select id="ngoStatusFilter">
+                  <option value="">All</option>
+                  <option>New</option>
+                  <option>Assigned</option>
+                  <option>Resolved</option>
+                </select>
+              </div>
+              <button class="btn small" id="exportCSV">Export CSV</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>🗂️ Reports</h3>
+            <div id="ngoTableWrap"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WEATHER -->
+      <section id="weather" class="view">
+        <div class="grid" style="margin-top: 18px">
+          <div class="card">
+            <h3>🌦️ 7‑Day Weather & Burn‑Risk</h3>
+            <p class="muted">
+              Use geolocation or enter coordinates. Powered by
+              <strong>Open‑Meteo</strong> (no API key).
+            </p>
+            <div class="row">
+              <div style="flex: 1">
+                <label>Latitude</label>
+                <input id="lat" placeholder="e.g., 19.0760" />
+              </div>
+              <div style="flex: 1">
+                <label>Longitude</label>
+                <input id="lon" placeholder="e.g., 72.8777" />
+              </div>
+              <button class="btn small" id="useGPS">Use My Location</button>
+              <button class="btn small" id="getForecast">Get Forecast</button>
+            </div>
+            <div style="height: 10px"></div>
+            <div id="forecastWrap" class="empty">
+              No forecast yet. Fetch to see recommendations.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>🧠 Heuristic Recommendation</h3>
+            <p class="muted">
+              We compute a simple burn‑risk score from humidity, wind and
+              temperature. Lower is better for safe handling; avoid burning.
+            </p>
+            <div id="advice" class="empty">
+              Run a forecast to generate advice.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="view">
+        <div class="card" style="margin-top: 18px">
+          <h3>About Crop Cure Stable</h3>
+          <p>
+            Crop Cure Stable is a lightweight, single‑file HTML/CSS/JS prototype
+            for a
+            <strong>Crop Residue Management System (CRMS)</strong>. It separates
+            the <em>Farmer</em> and <em>NGO</em> workflows, stores data locally
+            (offline‑ready), and includes a weather page with heuristic
+            recommendations to help schedule eco‑friendly residue practices
+            (mulching, composting, biochar, biogas, Happy Seeder).
+          </p>
+          <ul>
+            <li>No server required — everything runs in your browser.</li>
+            <li>
+              Data is saved in <code>localStorage</code>; export/import to
+              share.
+            </li>
+            <li>
+              Weather uses <em>Open‑Meteo</em> public API if you are online.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <footer>
+        ©️ <span id="year"></span> Crop Cure Stable • Built with vanilla
+        HTML/CSS/JS
+      </footer>
+    </div>
+
+    <script>
+      // ---------------------- UTILITIES ----------------------
+      const $ = (sel, root = document) => root.querySelector(sel);
+      const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+      const STORAGE_KEY = "crms_reports_v1";
+
+      const loadReports = () =>
+        JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      const saveReports = (arr) =>
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+
+      const uid = () => Math.random().toString(36).slice(2, 9);
+      const todayISO = () => new Date().toISOString();
+
+      const phonePretty = (s) =>
+        s.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{4}).*/, "+91 $1-$2-$3");
+
+      const toCSV = (rows) => {
+        if (!rows.length) return "";
+        const headers = Object.keys(rows[0]);
+        const escape = (v) => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+        const lines = [headers.join(",")].concat(
+          rows.map((r) => headers.map((h) => escape(r[h])).join(",")),
+        );
+        return lines.join("\n");
+      };
+
+      const download = (filename, text, type = "text/plain") => {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([text], { type }));
+        a.download = filename;
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+      };
+
+      // ---------------------- NAVIGATION ----------------------
+      $$("#year")[0].textContent = new Date().getFullYear();
+
+      const switchTo = (id) => {
+        $$(".view").forEach((v) => v.classList.remove("active"));
+        $("#" + id).classList.add("active");
+        $$(".tab").forEach((t) =>
+          t.classList.toggle("active", t.dataset.target === id),
+        );
+        // focus first interactive element for a11y
+        const first = $("#" + id).querySelector("input,select,textarea,button");
+        if (first) first.focus({ preventScroll: false });
+      };
+
+      document.addEventListener("click", (e) => {
+        const t = e.target.closest("[data-target]");
+        if (t) {
+          e.preventDefault();
+          switchTo(t.dataset.target);
+        }
+      });
+
+      // ---------------------- FARMER: FORM ----------------------
+      const renderFarmerList = () => {
+        const me = loadReports().filter((r) => r.source === "farmer");
+        const wrap = $("#farmerList");
+        if (!me.length) {
+          wrap.innerHTML =
+            '<div class="empty">No reports yet. Submit using the form.</div>';
+          return;
+        }
+        const rows = me
+          .sort((a, b) => b.created.localeCompare(a.created))
+          .slice(0, 6);
+        wrap.innerHTML = `<table><thead><tr>
+        <th>Date</th><th>Crop</th><th>Residue (t)</th><th>District</th><th>Status</th>
+      </tr></thead><tbody>
+      ${rows
+        .map(
+          (r) => `<tr>
+        <td>${new Date(r.created).toLocaleString()}</td>
+        <td>${r.crop}</td>
+        <td>${r.residue}</td>
+        <td>${r.district}</td>
+        <td><span class="pill">${r.status}</span></td>
+      </tr>`,
+        )
+        .join("")}</tbody></table>`;
+      };
+
+      $("#reportForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const report = {
+          id: uid(),
+          source: "farmer",
+          name: $("#f_name").value.trim(),
+          phone: $("#f_phone").value.trim(),
+          state: $("#f_state").value.trim(),
+          district: $("#f_district").value.trim(),
+          crop: $("#f_crop").value,
+          area: parseFloat($("#f_area").value || "0"),
+          residue: parseFloat($("#f_residue").value || "0"),
+          solution: $("#f_solution").value,
+          urgency: $("#f_urgency").value,
+          notes: $("#f_notes").value.trim(),
+          status: "New",
+          created: todayISO(),
+          updated: todayISO(),
+        };
+
+        // basic validation
+        if (
+          !report.name ||
+          !report.phone ||
+          !report.state ||
+          !report.district ||
+          !report.crop
+        ) {
+          alert("Please fill all required fields.");
+          return;
+        }
+        const phoneDigits = report.phone.replace(/\D/g, "");
+        if (phoneDigits.length < 10) {
+          alert("Enter a valid phone number.");
+          return;
+        }
+
+        const data = loadReports();
+        data.push(report);
+        saveReports(data);
+        e.target.reset();
+        alert("✅ Report submitted! Your NGO console will now see it.");
+        renderFarmerList();
+      });
+
+      $("#prefillDemo").addEventListener("click", () => {
+        $("#f_name").value = "Anjali Talhar";
+        $("#f_phone").value = "987******";
+        $("#f_state").value = "Maharashtra";
+        $("#f_district").value = "Nagpur";
+        $("#f_crop").value = "Wheat";
+        $("#f_area").value = "2.5";
+        $("#f_residue").value = "1.4";
+        $("#f_solution").value = "Composting";
+        $("#f_urgency").value = "Medium";
+        $("#f_notes").value = "Need assistance with compost pit layout.";
+      });
+
+      // ---------------------- NGO: TABLE & ACTIONS ----------------------
+      const renderNGOTable = () => {
+        const q = $("#ngoSearch").value.trim().toLowerCase();
+        const filterStatus = $("#ngoStatusFilter").value;
+        let rows = loadReports();
+
+        if (q) {
+          rows = rows.filter((r) =>
+            [r.name, r.district, r.phone].some((x) =>
+              String(x || "")
+                .toLowerCase()
+                .includes(q),
+            ),
+          );
+        }
+        if (filterStatus) {
+          rows = rows.filter((r) => r.status === filterStatus);
+        }
+
+        const wrap = $("#ngoTableWrap");
+        if (!rows.length) {
+          wrap.innerHTML = '<div class="empty">No matching reports.</div>';
+          return;
+        }
+
+        wrap.innerHTML = `<table><thead><tr>
+        <th>Date</th><th>Farmer</th><th>Contact</th><th>Location</th><th>Crop</th><th>Residue</th><th>Urgency</th><th>Status</th><th>Action</th>
+      </tr></thead><tbody>
+      ${rows
+        .sort((a, b) => b.created.localeCompare(a.created))
+        .map(
+          (r) => `<tr>
+        <td>${new Date(r.created).toLocaleDateString()}</td>
+        <td>${r.name}</td>
+        <td>${phonePretty(r.phone)}</td>
+        <td>${r.district}, ${r.state}</td>
+        <td>${r.crop}</td>
+        <td>${r.residue} t</td>
+        <td>${r.urgency}</td>
+        <td>${r.status}</td>
+        <td>
+          <div class="row">
+            <select data-act="status" data-id="${r.id}">
+              ${["New", "Assigned", "Resolved"]
+                .map(
+                  (s) =>
+                    `<option ${s === r.status ? "selected" : ""}>${s}</option>`,
+                )
+                .join("")}
+            </select>
+            <button class="btn small secondary" data-act="save" data-id="${
+              r.id
+            }">Save</button>
+          </div>
+        </td>
+      </tr>`,
+        )
+        .join("")}</tbody></table>`;
+      };
+
+      $("#ngoSearch").addEventListener("input", renderNGOTable);
+      $("#ngoStatusFilter").addEventListener("change", renderNGOTable);
+
+      $("#ngoTableWrap").addEventListener("click", (e) => {
+        const btn = e.target.closest('[data-act="save"]');
+        if (btn) {
+          const id = btn.dataset.id;
+          const sel = $(`select[data-act="status"][data-id="${id}"]`);
+          const data = loadReports();
+          const idx = data.findIndex((r) => r.id === id);
+          if (idx > -1) {
+            data[idx].status = sel.value;
+            data[idx].updated = todayISO();
+            saveReports(data);
+            alert("💾 Status updated");
+          }
+          renderNGOTable();
+          renderFarmerList();
+        }
+      });
+
+      // ---------------------- EXPORT/IMPORT/RESET ----------------------
+      $("#exportCSV").addEventListener("click", () => {
+        const csv = toCSV(loadReports());
+        download("crms-reports.csv", csv, "text/csv");
+      });
+
+      $("#exportJSON").addEventListener("click", () => {
+        download(
+          "crms-reports.json",
+          JSON.stringify(loadReports(), null, 2),
+          "application/json",
+        );
+      });
+
+      $("#importFile").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const arr = JSON.parse(reader.result);
+            if (Array.isArray(arr)) {
+              saveReports(arr);
+              alert("✅ Imported " + arr.length + " reports");
+              renderNGOTable();
+              renderFarmerList();
+            } else throw new Error();
+          } catch {
+            alert("Invalid JSON file.");
+          }
+        };
+        reader.readAsText(file);
+        e.target.value = "";
+      });
+
+      $("#resetAll").addEventListener("click", () => {
+        if (confirm("Reset all demo data?")) {
+          localStorage.removeItem(STORAGE_KEY);
+          renderNGOTable();
+          renderFarmerList();
+        }
+      });
+
+      // ---------------------- WEATHER: OPEN-METEO + HEURISTIC ----------------------
+      const riskScore = (t, rh, wind) => {
+        // Simple heuristic: higher temp + lower humidity + higher wind => higher risk for fires.
+        // Score 0 (best) .. 100 (worst)
+        t = Number(t);
+        rh = Number(rh);
+        wind = Number(wind);
+        let s = 0;
+        s += Math.max(0, t - 20) * 1.2; // temp above 20C
+        s += Math.max(0, 50 - rh) * 1.1; // humidity below 50%
+        s += wind * 3.0; // wind km/h
+        return Math.min(100, Math.max(0, Math.round(s)));
+      };
+
+      const badge = (score) => {
+        let text = "Low",
+          color = "#2fbf71";
+        if (score >= 65) {
+          text = "Very High";
+          color = "#d9534f";
+        } else if (score >= 45) {
+          text = "High";
+          color = "#f0ad4e";
+        } else if (score >= 25) {
+          text = "Moderate";
+          color = "#5bc0de";
+        }
+        return `<span class="pill" style="border-color:${color};background:rgba(0,0,0,0.02);color:${color}">${text} • ${score}</span>`;
+      };
+
+      const renderForecast = (data) => {
+        if (!data || !data.daily) {
+          $("#forecastWrap").innerHTML =
+            '<div class="empty">No forecast data.</div>';
+          return;
+        }
+        const rows = data.daily.time.map((d, i) => ({
+          date: d,
+          tmin: data.daily.temperature_2m_min[i],
+          tmax: data.daily.temperature_2m_max[i],
+          wind: data.daily.windspeed_10m_max[i],
+          rh: data.daily.relative_humidity_2m_mean
+            ? data.daily.relative_humidity_2m_mean[i]
+            : null,
+        }));
+
+        $("#forecastWrap").innerHTML = `<table><thead><tr>
+        <th>Date</th><th>Min</th><th>Max</th><th>Wind</th><th>Humidity</th><th>Risk</th>
+      </tr></thead><tbody>
+      ${rows
+        .map((r) => {
+          const score = riskScore((r.tmin + r.tmax) / 2, r.rh ?? 50, r.wind);
+          return `<tr>
+          <td>${new Date(r.date).toDateString()}</td>
+          <td>${r.tmin}°C</td>
+          <td>${r.tmax}°C</td>
+          <td>${r.wind} km/h</td>
+          <td>${r.rh ?? "—"}%</td>
+          <td>${badge(score)}</td>
+        </tr>`;
+        })
+        .join("")}</tbody></table>`;
+
+        // Advice block — choose 2 best days (lowest risk)
+        const ranked = rows
+          .map((r) => ({
+            ...r,
+            midT: (r.tmin + r.tmax) / 2,
+            score: riskScore((r.tmin + r.tmax) / 2, r.rh ?? 50, r.wind),
+          }))
+          .sort((a, b) => a.score - b.score)
+          .slice(0, 2);
+
+        $("#advice").innerHTML = `
+        <div>
+          <p><strong>Recommended Days:</strong></p>
+          <ul>
+            ${ranked
+              .map(
+                (r) =>
+                  `<li>${new Date(r.date).toDateString()} — ${badge(
+                    r.score,
+                  )} — Plan for mulching/composting; avoid burning.</li>`,
+              )
+              .join("")}
+          </ul>
+          <p class="muted">Tip: Prefer days with lower wind (&lt; 10 km/h) and higher humidity (&gt; 50%).
+          Early morning is best for field operations.</p>
+        </div>`;
+      };
+
+      const fetchForecast = async (lat, lon) => {
+        try {
+          $("#forecastWrap").innerHTML = "Fetching forecast…";
+          const url = new URL("https://api.open-meteo.com/v1/forecast");
+          url.search = new URLSearchParams({
+            latitude: lat,
+            longitude: lon,
+            daily: [
+              "temperature_2m_max",
+              "temperature_2m_min",
+              "windspeed_10m_max",
+              "relative_humidity_2m_mean",
+            ].join(","),
+            timezone: "auto",
+          }).toString();
+          const res = await fetch(url.toString());
+          const data = await res.json();
+          renderForecast(data);
+        } catch (err) {
+          console.error(err);
+          $("#forecastWrap").innerHTML =
+            '<div class="empty">Could not fetch forecast (are you online?).</div>';
+        }
+      };
+
+      $("#useGPS").addEventListener("click", () => {
+        if (!navigator.geolocation) {
+          alert("Geolocation not supported");
+          return;
+        }
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const { latitude, longitude } = pos.coords;
+            $("#lat").value = latitude.toFixed(4);
+            $("#lon").value = longitude.toFixed(4);
+          },
+          (err) => alert("Location error: " + err.message),
+        );
+      });
+
+      $("#getForecast").addEventListener("click", () => {
+        const lat = parseFloat($("#lat").value),
+          lon = parseFloat($("#lon").value);
+        if (Number.isFinite(lat) && Number.isFinite(lon))
+          fetchForecast(lat, lon);
+        else alert("Enter valid latitude and longitude.");
+      });
+
+      // ---------------------- HOME: EXPORT/IMPORT HOOKS ----------------------
+      // already wired above
+
+      // Initial renders
+      renderFarmerList();
+      renderNGOTable();
+    </script>
+  </body>
+</html>
